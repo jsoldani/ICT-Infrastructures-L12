@@ -105,7 +105,7 @@ The main change is the deployment configuration.
 The web service is specified using an image:
 
 ```yaml
-image: YOUR_DOCKERHUB_USERNAME/stack-demo-web:1.0
+image: ictinfr/stack-demo-web:1.0
 ```
 
 rather than:
@@ -137,25 +137,17 @@ A registry provides a common source:
               Node 1  Node 2  Node 3
 ```
 
-For this reason, build the image and push it to a registry before deploying the Stack.
+For this reason, build the image and push it to a registry before deploying the Stack. For this class, we shall use the local registry, but in a really distributed cluster, a remotely accessible registry is recommended.
 
 ---
 
 # 6. Prepare the image
 
-Replace:
-
-```text
-YOUR_DOCKERHUB_USERNAME
-```
-
-with your Docker Hub username.
-
 Build the image:
 
 ```bash
 docker build \
-  -t YOUR_DOCKERHUB_USERNAME/stack-demo-web:1.0 \
+  -t ictinfr/stack-demo-web:1.0 \
   ./web
 ```
 
@@ -165,22 +157,10 @@ Check it:
 docker image ls
 ```
 
-Log in to Docker Hub:
-
-```bash
-docker login
-```
-
-Push the image:
-
-```bash
-docker push YOUR_DOCKERHUB_USERNAME/stack-demo-web:1.0
-```
-
-Make sure `compose.yaml` contains the same image name:
+The `compose.yaml` contains the same image name:
 
 ```yaml
-image: YOUR_DOCKERHUB_USERNAME/stack-demo-web:1.0
+image: ictinfr/stack-demo-web:1.0
 ```
 
 ---
@@ -201,9 +181,7 @@ Inspect the nodes:
 docker node ls
 ```
 
-For a classroom demonstration on one machine, you will normally have one node.
-
-A real Swarm can contain multiple nodes.
+For our classroom demonstration on one machine, we will have one node. A real Swarm can contain multiple nodes.
 
 ---
 
@@ -414,78 +392,7 @@ This demonstrates:
 
 > **The individual container is disposable; the service's desired state is what Swarm maintains.**
 
----
-
-# 15. Update the application
-
-The image is versioned using tags.
-
-For example:
-
-```text
-stack-demo-web:1.0
-stack-demo-web:2.0
-```
-
-Modify `web/app.py`.
-
-For example, change the title to:
-
-```html
-<h1>Docker Stack Demo - Version 2</h1>
-```
-
-Build version 2:
-
-```bash
-docker build \
-  -t YOUR_DOCKERHUB_USERNAME/stack-demo-web:2.0 \
-  ./web
-```
-
-Push it:
-
-```bash
-docker push YOUR_DOCKERHUB_USERNAME/stack-demo-web:2.0
-```
-
-Update the service:
-
-```bash
-docker service update \
-  --image YOUR_DOCKERHUB_USERNAME/stack-demo-web:2.0 \
-  demo_web
-```
-
-Inspect the update:
-
-```bash
-docker service ps demo_web
-```
-
-Swarm replaces tasks running version `1.0` with tasks running version `2.0`.
-
----
-
-# 16. Deploying the updated Stack definition
-
-Alternatively, modify `compose.yaml`:
-
-```yaml
-image: YOUR_DOCKERHUB_USERNAME/stack-demo-web:2.0
-```
-
-Then run:
-
-```bash
-docker stack deploy -c compose.yaml demo
-```
-
-Swarm compares the desired configuration with the current state and updates the service.
-
----
-
-# 17. Why is PostgreSQL not replicated?
+# 15. Why is PostgreSQL not replicated?
 
 The web service is configured as:
 
@@ -534,7 +441,7 @@ This demo intentionally leaves those topics outside its scope.
 
 ---
 
-# 18. Important note about multi-node Swarms
+# 16. Important note about multi-node Swarms
 
 On a single machine, this demo is useful for learning:
 
@@ -557,120 +464,35 @@ For a multi-node Swarm:
        Worker 1   Worker 2
 ```
 
-the same Stack can schedule replicas across different nodes.
-
-The application image must be accessible to all nodes through a registry.
+the same Stack can schedule replicas across different nodes. The application image must be accessible to all nodes through a registry (e.g., Docker Hub)
 
 ---
 
-# 19. Useful Stack commands
+# 17. Suggested live-demo sequence
 
-List stacks:
-
-```bash
-docker stack ls
-```
-
-List services:
-
-```bash
-docker stack services demo
-```
-
-List tasks:
-
-```bash
-docker stack ps demo
-```
-
-Deploy/update:
-
-```bash
-docker stack deploy -c compose.yaml demo
-```
-
-Remove the Stack:
-
-```bash
-docker stack rm demo
-```
-
----
-
-# 20. Useful Swarm service commands
-
-List services:
-
-```bash
-docker service ls
-```
-
-Inspect a service:
-
-```bash
-docker service inspect demo_web
-```
-
-List its tasks:
-
-```bash
-docker service ps demo_web
-```
-
-Scale:
-
-```bash
-docker service scale demo_web=5
-```
-
-View service logs:
-
-```bash
-docker service logs demo_web
-```
-
-Update the image:
-
-```bash
-docker service update \
-  --image YOUR_DOCKERHUB_USERNAME/stack-demo-web:2.0 \
-  demo_web
-```
-
----
-
-# 21. Suggested live-demo sequence
-
-For a lecture demonstration, use the following sequence.
+For the in-class demonstration, we use the following sequence.
 
 ## Step 1 — Build the image
 
 ```bash
 docker build \
-  -t YOUR_DOCKERHUB_USERNAME/stack-demo-web:1.0 \
+  -t ictinfr/stack-demo-web:1.0 \
   ./web
 ```
 
-## Step 2 — Push it
-
-```bash
-docker login
-docker push YOUR_DOCKERHUB_USERNAME/stack-demo-web:1.0
-```
-
-## Step 3 — Initialize Swarm
+## Step 2 — Initialize Swarm
 
 ```bash
 docker swarm init
 ```
 
-## Step 4 — Deploy
+## Step 3 — Deploy
 
 ```bash
 docker stack deploy -c compose.yaml demo
 ```
 
-## Step 5 — Inspect
+## Step 4 — Inspect
 
 ```bash
 docker stack ls
@@ -678,7 +500,7 @@ docker stack services demo
 docker stack ps demo
 ```
 
-## Step 6 — Open the application
+## Step 5 — Open the application
 
 Open:
 
@@ -686,7 +508,7 @@ Open:
 
 Refresh several times.
 
-## Step 7 — Scale
+## Step 6 — Scale
 
 ```bash
 docker service scale demo_web=5
@@ -698,7 +520,7 @@ Then:
 docker stack services demo
 ```
 
-## Step 8 — Demonstrate self-healing
+## Step 7 — Demonstrate self-healing
 
 ```bash
 docker ps
@@ -708,35 +530,9 @@ docker service ps demo_web
 
 Observe that Swarm creates a replacement.
 
-## Step 9 — Update the application
-
-Build and push version 2:
-
-```bash
-docker build \
-  -t YOUR_DOCKERHUB_USERNAME/stack-demo-web:2.0 \
-  ./web
-
-docker push YOUR_DOCKERHUB_USERNAME/stack-demo-web:2.0
-```
-
-Update:
-
-```bash
-docker service update \
-  --image YOUR_DOCKERHUB_USERNAME/stack-demo-web:2.0 \
-  demo_web
-```
-
-Inspect:
-
-```bash
-docker service ps demo_web
-```
-
 ---
 
-# 22. Cleanup
+# 18. Cleanup
 
 Remove the Stack:
 
@@ -759,50 +555,3 @@ docker volume ls
 If you want to remove the database data as well, remove the relevant volume.
 
 > Be careful when deleting volumes: doing so permanently removes the stored PostgreSQL data.
-
----
-
-# 23. Key concepts demonstrated
-
-This demo illustrates:
-
-- Docker Swarm;
-- Docker Stack;
-- services;
-- tasks;
-- replicas;
-- desired state;
-- service scheduling;
-- scaling;
-- self-healing;
-- service updates;
-- image versioning;
-- service-name networking;
-- persistent volumes;
-- stateless vs stateful services;
-- container registries.
-
-The key conceptual progression is:
-
-```text
-Compose
-  │
-  │ multi-container application
-  ▼
-Swarm
-  │
-  │ orchestration
-  ▼
-Stack
-  │
-  ├── Services
-  ├── Tasks
-  ├── Replicas
-  ├── Scaling
-  ├── Self-healing
-  └── Updates
-```
-
-The central lesson is:
-
-> **Docker Compose describes and runs a multi-container application; Docker Stack uses the same application-oriented concepts to deploy services under Docker Swarm orchestration.**

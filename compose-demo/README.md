@@ -468,25 +468,3 @@ docker compose up -d
 
 The previous visits are gone.
 
----
-
-# 16. Main concepts demonstrated
-
-This demo illustrates:
-
-- Docker Compose;
-- declarative multi-container applications;
-- Compose services;
-- Docker networks;
-- service-name DNS;
-- environment variables;
-- container lifecycle;
-- image building;
-- PostgreSQL;
-- persistent volumes;
-- application readiness;
-- Compose commands.
-
-The key idea is:
-
-> **Docker Compose lets us describe an application consisting of multiple cooperating containers as a single declarative configuration.**
