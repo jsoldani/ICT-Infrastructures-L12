@@ -647,7 +647,7 @@ Why is it important that the web application is stateless?
 The following constraints apply:
 
 * **Do not use Docker Hub** for the BookShelf web image.
-* Use the local registry described in Section 12.
+* Use the local registry described in Section 10.
 * Do not hard-code the IP address of the PostgreSQL container.
 * Do not store application data inside the web container.
 * Use a Docker volume for PostgreSQL data.
