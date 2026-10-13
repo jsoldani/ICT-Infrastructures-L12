@@ -123,7 +123,7 @@ Create a `Dockerfile`:
 * set the working directory as `/app`
 * copy `requirements.txt`
 * install the requirements by running `pip install --no-cache-dir -r requirements.txt`
-* copy the Python application `requirements.txt` in the working directory
+* copy the Python application `app.py` in the working directory
 * run the following command when starting a container `python app.py`
 
 ---
@@ -348,51 +348,7 @@ Verify that your books are still present.
 
 ---
 
-# 9. Scaling the Web Service
-
-The web application is designed to be stateless: its persistent data is stored in PostgreSQL rather than inside the web container.
-
-Scale the web service to three containers:
-
-```bash
-docker compose up -d --scale web=3
-```
-
-Check the running containers:
-
-```bash
-docker compose ps
-```
-
-You should now have three web containers and one database container.
-
-Because all three web containers listen on port `8080` **inside the Docker network**, Docker Compose can run them simultaneously. The host port mapping may be handled differently depending on the Compose implementation; if necessary, remove the explicit host port mapping when scaling and access the service through an appropriate load-balancing configuration.
-
-For this exercise, the main objective is to observe that multiple containers can provide the same service.
-
-Inspect the containers:
-
-```bash
-docker ps
-```
-
----
-
-# 10. Web Container Identity
-
-The application displays the hostname of the container serving the request.
-
-Refresh the application several times and observe the hostname.
-
-You may see different container hostnames when requests are distributed among replicas, depending on how the service is exposed.
-
-### Question
-
-**Q7.** Why is it desirable for the web service to be stateless when multiple replicas are running?
-
----
-
-# 11. Docker Swarm
+# 9. Docker Swarm
 
 Docker Swarm provides orchestration capabilities on top of Docker.
 
@@ -417,7 +373,7 @@ The node will initially act as both:
 
 ---
 
-# 12. Local Docker Registry
+# 10. Local Docker Registry
 
 Docker Stack is designed for deploying services in a Swarm, potentially across multiple machines.
 
@@ -459,11 +415,11 @@ The image is now available from the local registry.
 
 ### Question
 
-**Q8.** Why does a multi-node Swarm deployment generally require a registry or another mechanism for distributing images?
+**Q7.** Why does a multi-node Swarm deployment generally require a registry or another mechanism for distributing images?
 
 ---
 
-# 13. Deploy the Application as a Docker Stack
+# 11. Deploy the Application as a Docker Stack
 
 Modify `compose.yaml` so that the web service uses the image from the local registry: `image: localhost:5000/ictinfr/bookshelf-web:1.0`
 
@@ -506,7 +462,7 @@ docker stack ps bookshelf
 
 ---
 
-# 14. Service, Task, and Container
+# 12. Service, Task, and Container
 
 Docker Swarm introduces some terminology that is important to understand.
 
@@ -554,11 +510,11 @@ docker service ps bookshelf_web
 
 ### Question
 
-**Q9.** Explain the difference between a Docker service, a Swarm task, and a container.
+**Q8.** Explain the difference between a Docker service, a Swarm task, and a container.
 
 ---
 
-# 15. Scaling the Service
+# 13. Scaling the Service
 
 Scale the web service from three to five replicas:
 
@@ -588,7 +544,7 @@ The number of replicas should be:
 
 ---
 
-# 16. Self-Healing
+# 14. Self-Healing
 
 One of the important features of an orchestrator is that it maintains the desired state.
 
@@ -626,13 +582,13 @@ The service should eventually return to:
 
 ### Question
 
-**Q10.** Why does Swarm create a replacement container after one of the web containers is killed?
+**Q09.** Why does Swarm create a replacement container after one of the web containers is killed?
 
 Explain the concept of **desired state reconciliation**.
 
 ---
 
-# 17. Updating the Application
+# 15. Updating the Application
 
 Modify `app.py`.
 
@@ -680,13 +636,13 @@ Observe how Swarm replaces the old tasks with tasks running the new image.
 
 ### Question
 
-**Q11.** What happens to the existing web containers when the service image is updated?
+**Q10.** What happens to the existing web containers when the service image is updated?
 
 Why is it important that the web application is stateless?
 
 ---
 
-# 18. Constraints
+# 16. Constraints
 
 The following constraints apply:
 
@@ -704,7 +660,7 @@ The following constraints apply:
 
 ---
 
-# 19. Optional Challenge
+# 17. Optional Challenge
 
 Extend the application with a simple REST-like API.
 
@@ -745,7 +701,7 @@ Finally, explain why the web service can still be scaled horizontally while usin
 
 ---
 
-# 20. Questions Summary
+# 18. Questions Summary
 
 1. What is the difference between a Docker image and a container?
 2. What do the main Dockerfile instructions do?
