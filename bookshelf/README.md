@@ -386,7 +386,7 @@ Start a registry:
 ```bash
 docker run -d \
   --name registry \
-  -p 5000:5000 \
+  -p 50000:5000 \
   --restart=always \
   registry:2
 ```
@@ -402,13 +402,13 @@ Tag the BookShelf image for the local registry:
 ```bash
 docker tag \
   ictinfr/bookshelf-web:1.0 \
-  localhost:5000/ictinfr/bookshelf-web:1.0
+  localhost:50000/ictinfr/bookshelf-web:1.0
 ```
 
 Push the image:
 
 ```bash
-docker push localhost:5000/ictinfr/bookshelf-web:1.0
+docker push localhost:50000/ictinfr/bookshelf-web:1.0
 ```
 
 The image is now available from the local registry.
@@ -421,7 +421,7 @@ The image is now available from the local registry.
 
 # 11. Deploy the Application as a Docker Stack
 
-Modify `compose.yaml` so that the web service uses the image from the local registry: `image: localhost:5000/ictinfr/bookshelf-web:1.0`
+Modify `compose.yaml` so that the web service uses the image from the local registry: `image: localhost:50000/ictinfr/bookshelf-web:1.0`
 
 Before deploying the Stack, remove the Compose deployment:
 
@@ -609,20 +609,20 @@ Tag it for the local registry:
 ```bash
 docker tag \
   ictinfr/bookshelf-web:1.1 \
-  localhost:5000/ictinfr/bookshelf-web:1.1
+  localhost:50000/ictinfr/bookshelf-web:1.1
 ```
 
 Push it:
 
 ```bash
-docker push localhost:5000/ictinfr/bookshelf-web:1.1
+docker push localhost:50000/ictinfr/bookshelf-web:1.1
 ```
 
 Update the running service:
 
 ```bash
 docker service update \
-  --image localhost:5000/ictinfr/bookshelf-web:1.1 \
+  --image localhost:50000/ictinfr/bookshelf-web:1.1 \
   bookshelf_web
 ```
 
@@ -656,7 +656,7 @@ The following constraints apply:
 * Use Docker Compose for the local deployment and Docker Stack for the Swarm deployment.
 * Use service names for service-to-service communication.
 
-> **Note:** The registry address `localhost:5000` is suitable for a single-machine classroom exercise. In a real multi-node Swarm, `localhost` would refer to each individual node, so the registry would need to be exposed through an address reachable by all nodes.
+> **Note:** The registry address `localhost:50000` is suitable for a single-machine classroom exercise. In a real multi-node Swarm, `localhost` would refer to each individual node, so the registry would need to be exposed through an address reachable by all nodes.
 
 ---
 
